@@ -27,7 +27,7 @@ module top(
     /*control*/
       wire PCWrite;
       wire Branch;
-      wire PCSrc;
+      wire [1:0]PCSrc;
       wire [5:0]ALUControl;
       wire [1:0]ALUSrcB;
       wire ALUSrcA;
@@ -60,7 +60,11 @@ module top(
     
     assign PCEn = (Zero & Branch) | PCWrite;
     
-    assign PC_NEW = PCSrc ? ALUOut : ALUResult;
+    assign PC_NEW[31:28] = PCSrc[1]?PC[31:28]:(PCSrc[0]?ALUOut[31:28]:ALUResult[31:28]);
+    assign PC_NEW[27:0] = PCSrc[1]?(instr[25:0]<<2):(PCSrc[0]?ALUOut[27:0]:ALUResult[27:0]);
+    
+    
+    
     always @(posedge clk, negedge rst_n)
     begin
       if (~rst_n) begin

@@ -24,7 +24,7 @@ module control(
       input rst_n, 
       output reg PCWrite,
       output reg Branch,
-      output reg PCSrc,
+      output reg [1:0]PCSrc,
       output reg [5:0]ALUControl,
       output reg [1:0]ALUSrcB,
       output reg ALUSrcA,
@@ -69,8 +69,9 @@ module control(
     parameter LW = 6'b100011;
     parameter SW = 6'b101011;
     parameter R_type = 6'b000_000;
-    parameter BEQ = 6'b000100;
+    parameter BGTZ = 6'b000111;
     parameter ADDI = 6'b001000;
+    parameter JUMP = 6'b000010;
 
     always @(posedge clk, negedge rst_n)
     begin
@@ -91,10 +92,12 @@ module control(
             next_state <= S3;
           end else if (Op == R_type) begin
             next_state <= S8;
-          end else if (Op == BEQ) begin
+          end else if (Op == BGTZ) begin
             next_state <= S10;
-          end else begin
-            
+          end else if (Op == ADDI) begin
+            next_state <= S11; 
+          end else if (Op == JUMP) begin
+            next_state <= S13;
           end
         end
         S3: begin
@@ -102,9 +105,7 @@ module control(
             next_state <= S4;
           end else if (Op == SW) begin
             next_state <= S7;
-          end else if (Op == ADDI) begin
-            next_state <= S11;
-          end
+          end 
         end
         S4: next_state <= S5;
         S5: next_state <= S6;
@@ -115,6 +116,7 @@ module control(
         S10: next_state <= S0;
         S11: next_state <= S12;
         S12: next_state <= S0;
+        S13: next_state <= S0;
         default: next_state = S0;
       endcase
     end
@@ -126,11 +128,22 @@ module control(
     always@(posedge clk, negedge rst_n)
     begin
       if (~rst_n) begin
-        
+        PCWrite <= 0;
+        Branch <= 0;
+        PCSrc  <= 2'b00;
+        ALUControl  <= A_ADD;
+        ALUSrcB <= 2'b01;
+        ALUSrcA <= 0;
+        RegWrite <= 0;
+        IorD <= 0;  //Adr <- PC
+        MemWrite <= 0;
+        IRWrite <= 0;
+        //RegDst <= 
+        //MemtoReg 
       end else if (next_state == S0) begin
         PCWrite <= 0;
         Branch <= 0;
-        PCSrc  <= 0;
+        PCSrc  <= 2'b00;
         ALUControl  <= A_ADD;
         ALUSrcB <= 2'b01;
         ALUSrcA <= 0;
@@ -143,7 +156,7 @@ module control(
       end else if (next_state == S1) begin
         PCWrite <= 1;   //PC = PC + 4
         Branch <= 0;
-        PCSrc  <= 0;
+        PCSrc  <= 2'b00;
         ALUControl  <= A_ADD;
         ALUSrcB <= 2'b01;
         ALUSrcA <= 0;
@@ -227,7 +240,7 @@ module control(
         ALUSrcA <= 1;
         ALUSrcB <= 2'b00;
         ALUControl <= IS_POSIT;
-        PCSrc <= 1;
+        PCSrc <= 2'b01;
         Branch <= 1;
       end else if (next_state == S11) begin
         ALUSrcA <= 1;
@@ -237,7 +250,10 @@ module control(
         RegDst <= 0;
         MemtoReg <= 0;
         RegWrite <= 1;
-      end 
+      end else if (next_state == S13) begin
+        PCSrc <= 2'b10;
+        PCWrite <= 1;
+      end
     end
 
 
