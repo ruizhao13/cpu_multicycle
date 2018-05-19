@@ -45,6 +45,8 @@ module control(
     parameter	A_OR  	= 6'b100101;
     parameter	A_XOR 	= 6'b100110;
     parameter	A_NOR   = 6'b100111;
+    parameter    IS_POSIT = 6'b111111;
+
 
     reg	[3:0]	curr_state, next_state;
     parameter S0 = 4'b0000; //Instruction Fetch
@@ -67,6 +69,8 @@ module control(
     parameter LW = 6'b100011;
     parameter SW = 6'b101011;
     parameter R_type = 6'b000_000;
+    parameter BEQ = 6'b000100;
+    parameter ADDI = 6'b001000;
 
     always @(posedge clk, negedge rst_n)
     begin
@@ -87,6 +91,10 @@ module control(
             next_state <= S3;
           end else if (Op == R_type) begin
             next_state <= S8;
+          end else if (Op == BEQ) begin
+            next_state <= S10;
+          end else begin
+            
           end
         end
         S3: begin
@@ -94,6 +102,8 @@ module control(
             next_state <= S4;
           end else if (Op == SW) begin
             next_state <= S7;
+          end else if (Op == ADDI) begin
+            next_state <= S11;
           end
         end
         S4: next_state <= S5;
@@ -102,6 +112,9 @@ module control(
         S7: next_state <= S0;
         S8: next_state <= S9;
         S9: next_state <= S0;
+        S10: next_state <= S0;
+        S11: next_state <= S12;
+        S12: next_state <= S0;
         default: next_state = S0;
       endcase
     end
@@ -144,9 +157,9 @@ module control(
         PCWrite <= 0;
         Branch <= 0;
         //PCSrc  <= 0;
-        //ALUControl  <= A_ADD;
-        //ALUSrcB <= 2'b01;
-        //ALUSrcA <= 0;
+        ALUControl  <= A_ADD;
+        ALUSrcB <= 2'b11;
+        ALUSrcA <= 0;
         RegWrite <= 0;
         //IorD <= 0;
         MemWrite <= 0;
@@ -210,9 +223,21 @@ module control(
         RegDst <= 1;
         MemtoReg <= 0;
         RegWrite <= 1;
-      end else begin
-        
-      end
+      end else if (next_state == S10) begin
+        ALUSrcA <= 1;
+        ALUSrcB <= 2'b00;
+        ALUControl <= IS_POSIT;
+        PCSrc <= 1;
+        Branch <= 1;
+      end else if (next_state == S11) begin
+        ALUSrcA <= 1;
+        ALUSrcB <= 2'b10;
+        ALUControl <= A_ADD;
+      end else if (next_state == S12) begin
+        RegDst <= 0;
+        MemtoReg <= 0;
+        RegWrite <= 1;
+      end 
     end
 
 

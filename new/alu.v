@@ -36,7 +36,7 @@ parameter	A_AND 	= 6'b100100;
 parameter	A_OR  	= 6'b100101;
 parameter	A_XOR 	= 6'b100110;
 parameter	A_NOR   = 6'b100111;
-//parameter    IS_POSIT = 6'b111111;
+parameter    IS_POSIT = 6'b111111;
 always@(*)
 begin
   case (alu_op)
@@ -52,6 +52,6 @@ begin
   endcase
 end
 
-assign Zero = (alu_out == 4'h0000) ? 1:0;
+assign Zero = (alu_a > 0) ? 1:0;
 endmodule
 
