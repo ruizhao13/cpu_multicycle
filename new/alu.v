@@ -25,7 +25,8 @@ module ALU(
   input  signed	    [31:0]	alu_a,
   input  signed	    [31:0]	alu_b,
   input	            [5:0]	alu_op,
-  output   reg      [31:0]	alu_out
+  output   reg      [31:0]	alu_out,
+  output   wire			Zero
 );
 parameter	A_NOP	= 5'h00;	 	
 //parameter	A_ADD	= 5'h01;
@@ -50,5 +51,7 @@ begin
   	default:  alu_out = 0;
   endcase
 end
+
+assign Zero = (alu_out == 4'h0000) ? 1:0;
 endmodule
 
