@@ -64,6 +64,10 @@ module control(
 	parameter S13 = 4'b1101;
 	parameter S14 = 4'b1110;
     
+    
+    parameter LW = 100011;
+    parameter SW = 101011;
+    
 
     always @(posedge clk, negedge rst_n)
     begin
