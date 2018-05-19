@@ -65,8 +65,8 @@ module control(
 	parameter S14 = 4'b1110;
     
     
-    parameter LW = 100011;
-    parameter SW = 101011;
+    parameter LW = 6'b100011;
+    parameter SW = 6'b101011;
     
 
     always @(posedge clk, negedge rst_n)
@@ -87,7 +87,7 @@ module control(
           if (Op == LW || Op == SW) begin
             next_state <= S3;
           end else begin
-            
+            next_state <= S10;
           end
         end
         S3: begin
@@ -113,11 +113,11 @@ module control(
     begin
       if (~rst_n) begin
         
-      end else if (curr_state == S0) begin
+      end else if (next_state == S0) begin
         PCWrite <= 0;
         Branch <= 0;
         PCSrc  <= 0;
-        ALUControl  <= A_AND;
+        ALUControl  <= A_ADD;
         ALUSrcB <= 2'b01;
         ALUSrcA <= 0;
         RegWrite <= 0;
@@ -126,24 +126,24 @@ module control(
         IRWrite <= 0;
         //RegDst <= 
         //MemtoReg 
-      end else if (curr_state == S1) begin
-        PCWrite <= 1;   //ins <- M[PC]
+      end else if (next_state == S1) begin
+        PCWrite <= 1;   //PC = PC + 4
         Branch <= 0;
         PCSrc  <= 0;
-        ALUControl  <= A_AND;
+        ALUControl  <= A_ADD;
         ALUSrcB <= 2'b01;
         ALUSrcA <= 0;
         RegWrite <= 0;
         IorD <= 0;
         MemWrite <= 0;
-        IRWrite <= 1; //PC = PC + 4
+        IRWrite <= 1; //ins <- M[PC]
         //RegDst <= 
         //MemtoReg 
-      end else if (curr_state == S2) begin//instr update done which means a1, a2, a3 update done
+      end else if (next_state == S2) begin//instr update done which means a1, a2, a3 update done
         PCWrite <= 0;
         Branch <= 0;
         //PCSrc  <= 0;
-        //ALUControl  <= A_AND;
+        //ALUControl  <= A_ADD;
         //ALUSrcB <= 2'b01;
         //ALUSrcA <= 0;
         RegWrite <= 0;
@@ -153,12 +153,12 @@ module control(
         //RegDst <= 
         //MemtoReg 
         
-      end else if (curr_state == S3)begin//A, B, ALURESULT update done
+      end else if (next_state == S3)begin//A, B, ALURESULT update done
         /* LW OR SW */
         PCWrite <= 0;
         Branch <= 0;
         //PCSrc  <= 0;
-        ALUControl  <= A_AND;
+        ALUControl  <= A_ADD;
         ALUSrcB <= 2'b10;
         ALUSrcA <= 1;
         RegWrite <= 0;
@@ -167,11 +167,11 @@ module control(
         IRWrite <= 0;
         //RegDst <= 
         //MemtoReg 
-      end else if (curr_state == S4) begin//ALUOUT IS DONE
+      end else if (next_state == S4) begin//ALUOUT IS DONE
         PCWrite <= 0;
         Branch <= 0;
         //PCSrc  <= 0;
-        ALUControl  <= A_AND;
+        ALUControl  <= A_ADD;
         ALUSrcB <= 2'b10;
         ALUSrcA <= 1;
         RegWrite <= 0;
@@ -180,11 +180,11 @@ module control(
         IRWrite <= 0;
         //RegDst <= 
         //MemtoReg 
-      end else if (curr_state == S5) begin//
+      end else if (next_state == S5) begin//
         PCWrite <= 0;
         Branch <= 0;
         //PCSrc  <= 0;
-        ALUControl  <= A_AND;
+        ALUControl  <= A_ADD;
         ALUSrcB <= 2'b01;
         ALUSrcA <= 0;
         RegWrite <= 0;
@@ -193,11 +193,11 @@ module control(
         IRWrite <= 0;
         //RegDst <= 
         //MemtoReg 
-      end else if (curr_state == S6) begin//Data update done
+      end else if (next_state == S6) begin//Data update done
         RegDst <= 0;
         MemtoReg <= 1;
         RegWrite <= 1;
-      end else if (curr_state == S7) begin//ALUout is done
+      end else if (next_state == S7) begin//ALUout is done
         IorD <= 1;
         MemWrite <= 1;
         

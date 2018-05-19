@@ -1,10 +1,10 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.2 (win64) Build 1577090 Thu Jun  2 16:32:40 MDT 2016
--- Date        : Wed May 16 16:08:12 2018
+-- Date        : Sat May 19 19:35:08 2018
 -- Host        : DESKTOP-RONFFCB running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
---               d:/study/COD/lab/lab6_cpu_mulcyc/project_1/project_1.srcs/sources_1/ip/memory/memory_sim_netlist.vhdl
+--               D:/study/COD/lab/lab6_cpu_mulcyc/project_1/project_1.srcs/sources_1/ip/memory/memory_sim_netlist.vhdl
 -- Design      : memory
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -52,7 +52,7 @@ begin
       INITP_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INITP_07 => X"0000000000000000000000000000000000000000000000000000000000000000",
-      INIT_00 => X"0000000000000000000000000000000000000000000000000000000200000001",
+      INIT_00 => X"000000000000000000000000000000000000000000000000000000008C0D0000",
       INIT_01 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_02 => X"0000000000000000000000000000000000000000000000000000000000000000",
       INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",

@@ -76,18 +76,18 @@ module top(
     assign Adr = IorD ? ALUOut : PC;
     memory u_memory (
       .clka(clk),    // input wire clka
-      .ena(ena),      // input wire ena
+      .ena(1),      // input wire ena
       .wea(MemWrite),      // input wire [0 : 0] wea
       .addra(Adr),  // input wire [7 : 0] addra
       .dina(B),    // input wire [31 : 0] dina
       .clkb(clk),    // input wire clkb
-      .enb(enb),      // input wire enb
+      .enb(1),      // input wire enb
       .addrb(Adr),  // input wire [7 : 0] addrb
       .doutb(doutb)  // output wire [31 : 0] doutb
     );
     always@(posedge clk, negedge rst_n)
     begin
-      if (rst_n) begin
+      if (~rst_n) begin
         instr <= instr; 
         Data <= 0;
       end else begin

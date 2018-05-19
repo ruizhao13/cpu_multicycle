@@ -40,10 +40,10 @@ module REG_FILE(
     always @(posedge clk)begin
       
       if ( ~rst_n ) begin
-        regfile[0] <= 0;
-        regfile[1] <= 0;
+        regfile[0] <= 1;
+        regfile[1] <= 2;
         for (i = 2; i < 32; i = i + 1 ) begin
-          regfile[i] <= 0;
+          regfile[i] <= 3;
         end
       end else begin
         if (wEna) begin
