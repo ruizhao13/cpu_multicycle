@@ -78,11 +78,11 @@ module top(
       .clka(clk),    // input wire clka
       .ena(1),      // input wire ena
       .wea(MemWrite),      // input wire [0 : 0] wea
-      .addra(Adr),  // input wire [7 : 0] addra
+      .addra(Adr>>2),  // input wire [7 : 0] addra
       .dina(B),    // input wire [31 : 0] dina
       .clkb(clk),    // input wire clkb
       .enb(1),      // input wire enb
-      .addrb(Adr),  // input wire [7 : 0] addrb
+      .addrb(Adr>>2),  // input wire [7 : 0] addrb
       .doutb(doutb)  // output wire [31 : 0] doutb
     );
     always@(posedge clk, negedge rst_n)
