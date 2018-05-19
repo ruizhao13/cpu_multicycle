@@ -24,7 +24,7 @@
 module ALU(
   input  signed	    [31:0]	alu_a,
   input  signed	    [31:0]	alu_b,
-  input	            [5:0]	alu_op,
+  input	            [2:0]	alu_op,
   output   reg      [31:0]	alu_out,
   output   wire			Zero
 );

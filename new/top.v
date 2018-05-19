@@ -51,7 +51,7 @@ module top(
     wire [31:0]ALUResult;
     wire Zero;
     wire PCEn;
-    wire [31:0] SrcA, SrcB, Signlmm;
+    wire [31:0] SrcA, SrcB, SignImm;
     wire [31:0] doutb;
 
 
@@ -79,7 +79,7 @@ module top(
       .ena(ena),      // input wire ena
       .wea(MemWrite),      // input wire [0 : 0] wea
       .addra(Adr),  // input wire [7 : 0] addra
-      .dina(dina),    // input wire [31 : 0] dina
+      .dina(B),    // input wire [31 : 0] dina
       .clkb(clk),    // input wire clkb
       .enb(enb),      // input wire enb
       .addrb(Adr),  // input wire [7 : 0] addrb
@@ -96,8 +96,8 @@ module top(
       end
     end
     
-    assign Signlmm = instr[15] ;
-    
+    assign SignImm[31:16] = (instr[15])? (16'b1111_1111_1111_1111) : (16'b0000_0000_0000_0000);
+    assign SignImm[15:0] = instr[15:0]; 
 
 
 
@@ -148,7 +148,7 @@ module top(
     end
 
     assign SrcA = ALUSrcA ? A : PC;
-    assign SrcB = (ALUSrcB == 2'b00) ? B : (ALUSrcB == 2'b01) ? 4 : (ALUSrcB == 2'b10) ? Signlmm : (ALUSrcB == 2'b11)? Signlmm<<2:0;  
+    assign SrcB = (ALUSrcB == 2'b00) ? B : (ALUSrcB == 2'b01) ? 4 : (ALUSrcB == 2'b10) ? SignImm : (ALUSrcB == 2'b11)? SignImm<<2:0;  
     
     ALU u_ALU(
       .alu_a(SrcA),
@@ -183,6 +183,7 @@ module top(
     assign Funct = instr[5:0];
     control u_control(
       .clk(clk),
+      .rst_n(rst_n),
       .PCWrite(PCWrite),
       .Branch(Branch),
       .PCSrc(PCSrc),

@@ -19,17 +19,22 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module control(
-    input [5:0] Op,
-    input [5:0] Funct,
-    output reg MemtoReg,// 1 to choose mem, 0 to choose ALUResult
-    output reg MemWrite,// 1 to enwrite mem, 0 to not enwrite mem
-    output reg Branch,// 
-    output reg [5:0] ALUControl,
-    output reg ALUSrc, // 1 to immediate, 0 to read_data2
-    output reg RegDst,// 1 to 15:11, 0 to 20:16
-    output reg RegWrite,
-    output reg Jump
+      input clk,
+      input rst_n, 
+      output reg PCWrite,
+      output reg Branch,
+      output reg PCSrc,
+      output reg [2:0]ALUControl,
+      output reg [1:0]ALUSrcB,
+      output reg ALUSrcA,
+      output reg RegWrite,
+      output reg lorD,
+      output reg MemWrite,
+      output reg IRWrite,
+      input  [5:0]Op,
+      input  [5:0]Funct,
+      output reg RegDst,
+      output reg MemtoReg  
     );
 endmodule
