@@ -28,7 +28,7 @@ module top(
       wire PCWrite;
       wire Branch;
       wire PCSrc;
-      wire [2:0]ALUControl;
+      wire [5:0]ALUControl;
       wire [1:0]ALUSrcB;
       wire ALUSrcA;
       wire RegWrite;
@@ -160,7 +160,7 @@ module top(
     
     always@(posedge clk, negedge rst_n)
     begin
-      if (rst_n) begin
+      if (~rst_n) begin
         ALUOut <= 0;  
       end else begin
         ALUOut <= ALUResult;

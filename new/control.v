@@ -25,7 +25,7 @@ module control(
       output reg PCWrite,
       output reg Branch,
       output reg PCSrc,
-      output reg [2:0]ALUControl,
+      output reg [5:0]ALUControl,
       output reg [1:0]ALUSrcB,
       output reg ALUSrcA,
       output reg RegWrite,
@@ -39,13 +39,12 @@ module control(
     );
     parameter	A_NOP	= 3'b000;	 	
     //parameter	A_ADD	= 5'h01;
-    parameter   A_ADD 	= 3'b010;	
-    parameter	A_SUB	= 3'b011;	
-    parameter	A_AND 	= 3'b100;
-    parameter	A_OR  	= 3'b101;
-    parameter	A_XOR 	= 3'b110;
-    parameter	A_NOR   = 3'b111;
-    parameter    IS_POSIT = 6'b111111;
+    parameter   A_ADD 	= 6'b100_000;	
+    parameter	A_SUB	= 6'b100010;	
+    parameter	A_AND 	= 6'b100100;
+    parameter	A_OR  	= 6'b100101;
+    parameter	A_XOR 	= 6'b100110;
+    parameter	A_NOR   = 6'b100111;
 
     reg	[3:0]	curr_state, next_state;
     parameter S0 = 4'b0000; //Instruction Fetch
@@ -67,7 +66,7 @@ module control(
     
     parameter LW = 6'b100011;
     parameter SW = 6'b101011;
-    
+    parameter R_type = 6'b000_000;
 
     always @(posedge clk, negedge rst_n)
     begin
@@ -86,8 +85,8 @@ module control(
         S2: begin
           if (Op == LW || Op == SW) begin
             next_state <= S3;
-          end else begin
-            next_state <= S10;
+          end else if (Op == R_type) begin
+            next_state <= S8;
           end
         end
         S3: begin
@@ -101,6 +100,8 @@ module control(
         S5: next_state <= S6;
         S6: next_state <= S0;
         S7: next_state <= S0;
+        S8: next_state <= S9;
+        S9: next_state <= S0;
         default: next_state = S0;
       endcase
     end
@@ -201,6 +202,14 @@ module control(
         IorD <= 1;
         MemWrite <= 1;
         
+      end else if (next_state == S8) begin//A, B, ALURESULT update done
+        ALUSrcA <= 1;
+        ALUSrcB <= 2'b00;
+        ALUControl <= Funct;
+      end else if (next_state == S9) begin
+        RegDst <= 1;
+        MemtoReg <= 0;
+        RegWrite <= 1;
       end else begin
         
       end

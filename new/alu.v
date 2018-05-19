@@ -24,18 +24,18 @@
 module ALU(
   input  signed	    [31:0]	alu_a,
   input  signed	    [31:0]	alu_b,
-  input	            [2:0]	alu_op,
+  input	            [5:0]	alu_op,
   output   reg      [31:0]	alu_out,
   output   wire			Zero
 );
 parameter	A_NOP	= 3'b000;	 	
 //parameter	A_ADD	= 5'h01;
-parameter   A_ADD 	= 3'b010;	
-parameter	A_SUB	= 3'b011;	
-parameter	A_AND 	= 3'b100;
-parameter	A_OR  	= 3'b101;
-parameter	A_XOR 	= 3'b110;
-parameter	A_NOR   = 3'b111;
+parameter   A_ADD 	= 6'b100_000;	
+parameter	A_SUB	= 6'b100010;	
+parameter	A_AND 	= 6'b100100;
+parameter	A_OR  	= 6'b100101;
+parameter	A_XOR 	= 6'b100110;
+parameter	A_NOR   = 6'b100111;
 //parameter    IS_POSIT = 6'b111111;
 always@(*)
 begin
