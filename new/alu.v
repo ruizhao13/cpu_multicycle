@@ -28,15 +28,15 @@ module ALU(
   output   reg      [31:0]	alu_out,
   output   wire			Zero
 );
-parameter	A_NOP	= 5'h00;	 	
+parameter	A_NOP	= 3'b000;	 	
 //parameter	A_ADD	= 5'h01;
-parameter   A_ADD = 6'b100000;	
-parameter	A_SUB	= 5'h02;	
-parameter	A_AND 	= 5'h03;
-parameter	A_OR  	= 5'h04;
-parameter	A_XOR 	= 5'h05;
-parameter	A_NOR   = 5'h06;
-parameter    IS_POSIT = 6'b111111;
+parameter   A_ADD 	= 3'b010;	
+parameter	A_SUB	= 3'b011;	
+parameter	A_AND 	= 3'b100;
+parameter	A_OR  	= 3'b101;
+parameter	A_XOR 	= 3'b110;
+parameter	A_NOR   = 3'b111;
+//parameter    IS_POSIT = 6'b111111;
 always@(*)
 begin
   case (alu_op)
@@ -47,7 +47,7 @@ begin
   	A_OR:   alu_out = alu_a | alu_b;
   	A_XOR:  alu_out = alu_a ^ alu_b;
   	A_NOR:  alu_out = ~(alu_a | alu_b);
-	IS_POSIT: alu_out = alu_a - 1;
+	//IS_POSIT: alu_out = alu_a - 1;
   	default:  alu_out = 0;
   endcase
 end

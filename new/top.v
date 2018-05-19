@@ -32,7 +32,7 @@ module top(
       wire [1:0]ALUSrcB;
       wire ALUSrcA;
       wire RegWrite;
-      wire lorD;
+      wire IorD;
       wire MemWrite;
       wire IRWrite;
       wire [5:0]Op;
@@ -73,7 +73,7 @@ module top(
     
     
     
-    assign Adr = lorD ? ALUOut : PC;
+    assign Adr = IorD ? ALUOut : PC;
     memory u_memory (
       .clka(clk),    // input wire clka
       .ena(ena),      // input wire ena
@@ -191,7 +191,7 @@ module top(
       .ALUSrcB(ALUSrcB),
       .ALUSrcA(ALUSrcA),
       .RegWrite(RegWrite),
-      .lorD(lorD),
+      .IorD(IorD),
       .MemWrite(MemWrite),
       .IRWrite(IRWrite),
       .Op(Op),
