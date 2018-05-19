@@ -69,9 +69,7 @@ module top(
         PC <= PCEn ? PC_NEW : PC;
       end
     end
-    assign A1 = instr[25:21];
-    assign A2 = instr[20:16];
-    assign A3 =RegDst ? instr[15:11] : instr[20:16];
+    
     
     
     
@@ -121,7 +119,7 @@ module top(
 
 
 
-    
+
     assign A1 = instr[25:21];
     assign A2 = instr[20:16];
     assign A3 = RegDst ? instr[15:11] : instr[20:16];
@@ -181,7 +179,8 @@ module top(
 
 
 
-
+    assign Op = instr[31:26];
+    assign Funct = instr[5:0];
     control u_control(
       .clk(clk),
       .PCWrite(PCWrite),
